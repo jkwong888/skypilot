@@ -207,6 +207,12 @@ available_node_types:
   {%- endif %}
   {%- if use_spot or gpu is not none %}
       scheduling:
+  {%- if gcp_use_managed_instance_group %}
+        provisioningModel: FLEX_START
+        instanceTerminationAction: DELETE
+        maxRunDuration:
+          seconds: {{ run_duration }}
+  {%- endif %}
   {%- if use_spot %}
         automaticRestart: false
         instanceTerminationAction: DELETE
@@ -288,4 +294,3 @@ setup_commands:
     {{ ssh_max_sessions_config }}
 
 # Command to start ray clusters are now placed in `sky.provision.instance_setup`.
-# We do not need to list it here anymore.
